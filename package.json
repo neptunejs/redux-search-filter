@@ -1,0 +1,59 @@
+{
+  "name": "redux-search-filter",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "module": "src/index.js",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "eslint": "eslint src",
+    "eslint-fix": "npm run eslint -- --fix",
+    "prepublishOnly": "rollup -c",
+    "test": "run-s testonly eslint",
+    "test-travis": "eslint src && jest --coverage && codecov",
+    "testonly": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neptunejs/redux-search-filter.git"
+  },
+  "keywords": [],
+  "author": "Michaël Zasso",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neptunejs/redux-search-filter/issues"
+  },
+  "homepage": "https://github.com/neptunejs/redux-search-filter#readme",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "codecov": "^2.2.0",
+    "eslint": "^4.2.0",
+    "eslint-config-cheminfo": "^1.8.0",
+    "eslint-plugin-no-only-tests": "^2.0.0",
+    "jest": "^20.0.4",
+    "npm-run-all": "^4.0.2",
+    "rollup": "^0.45.2"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "lodash-es": "^4.17.4",
+    "ml-array-max": "^1.0.1",
+    "ml-array-min": "^1.0.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-redux": "^5.0.5",
+    "redux": "^3.7.2",
+    "reselect": "^3.0.1"
+  },
+  "peerDependencies": {
+    "react": "^15.0.0",
+    "react-redux": "^5.0.0",
+    "redux": "^3.0.0"
+  }
+}
