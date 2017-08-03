@@ -3,7 +3,9 @@ import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
 
 import {
-    updateFilter
+    updateFilter,
+    setOperator,
+    setNegated
 } from './actions';
 import filterOneSelector from './filterOneSelector';
 
@@ -35,6 +37,7 @@ class ConnectedFilter extends Component {
     }
 
     render() {
+        const currentFilter = this.props.filters ? this.props.filters.get(this.props.prop) : null;
         const newProps = {
             onChange: this.props.filterUpdate
         };
@@ -45,13 +48,12 @@ class ConnectedFilter extends Component {
             }
         }
 
-        const currentFilter = this.props.filters ? this.props.filters.get(this.props.prop) : null;
         if (this.props.kind === 'range') {
             newProps.range = this.selector(this.props);
             newProps.value = currentFilter ? currentFilter : newProps.range;
         } else {
             newProps.options = this.selector(this.props);
-            newProps.value = currentFilter ? currentFilter : [];
+            newProps.filter = currentFilter;
         }
         return createElement(this.props.component, newProps);
     }
@@ -68,7 +70,9 @@ export default connect(
     (dispatch, props) => {
         const name = props.searchFilter.name;
         return {
-            filterUpdate: (value) => dispatch(updateFilter(name, props.prop, props.kind, value))
+            filterUpdate: (value) => dispatch(updateFilter(name, props.prop, props.kind, value)),
+            setOperator: (value) => dispatch(setOperator(name, props.prop, props.kind, value)),
+            setNegated: (value) => dispatch(setNegated(name, props.prop, props.kind, value))
         };
     }
 )(ConnectedFilter);

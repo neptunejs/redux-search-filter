@@ -1,18 +1,68 @@
 export default function filterData(data, filters) {
     return data.filter((item) => {
-        main: for (const [filterProp, filterValue] of filters) {
-            if (Array.isArray(item[filterProp])) {
-                for (const value of item[filterProp]) {
-                    if (filterValue.includes(value)) {
-                        continue main;
+        main: for (const [filterProp, filterOptions] of filters) {
+            const filterValue = filterOptions.value;
+            const operator = filterOptions.operator;
+            const negated = filterOptions.negated;
+            const itemValue = item[filterProp];
+            if (filterOptions.value.length) {
+                if (Array.isArray(itemValue)) { // kind: multiple
+                    if (operator === 'AND') {
+                        for (const val of filterValue) {
+                            if (!itemValue.includes(val)) {
+                                if (!negated) {
+                                    return false;
+                                }
+                            } else {
+                                if (negated) {
+                                    return false;
+                                }
+                            }
+                        }
+                    } else {
+                        for (const value of filterValue) {
+                            if (itemValue.includes(value)) {
+                                if (!negated) {
+                                    continue main;
+                                }
+                            } else {
+                                if (negated) {
+                                    continue main;
+                                }
+                            }
+                        }
+                        return false;
                     }
-                }
-                return false;
-            } else {
-                if (Array.isArray(filterValue) && !filterValue.includes(item[filterProp])) {
-                    return false;
-                } else if (item[filterProp] < filterValue.min || item[filterProp] > filterValue.max) {
-                    return false;
+                } else {
+                    if (Array.isArray(filterValue)) { // kind: value
+                        const isIncluded = filterValue.includes(item[filterProp]);
+                        if (operator === 'AND') {
+                            if (negated) {
+                                if (isIncluded) {
+                                    return false;
+                                }
+                            } else {
+                                if (filterValue.length > 1) return false;
+                                if (!isIncluded) {
+                                    return false;
+                                }
+                            }
+                        } else {
+                            if (negated) {
+                                if (isIncluded) {
+                                    return false;
+                                }
+                            } else {
+                                if (!isIncluded) {
+                                    return false;
+                                }
+                            }
+                        }
+                    } else { // kind: range
+                        if (item[filterProp] < filterValue.min || item[filterProp] > filterValue.max) {
+                            return false;
+                        }
+                    }
                 }
             }
         }

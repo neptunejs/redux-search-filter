@@ -24,7 +24,13 @@ function filterValue(data, prop, filters) {
 
 function filterMultiple(data, prop, filters) {
     data = filterDataFor(data, prop, filters);
-    return makeArray(countMultiple(data, prop));
+    const filter = filters && filters.get(prop);
+    if (filter && filter.negated) {
+        return makeArray(countMultipleNegated(data, prop));
+    } else {
+        return makeArray(countMultiple(data, prop));
+    }
+
 }
 
 function filterRange(data, prop, filters) {
@@ -78,6 +84,14 @@ function countMultiple(data, prop) {
                 counts[str]++;
             }
         }
+    }
+    return counts;
+}
+
+function countMultipleNegated(data, prop) {
+    const counts = countMultiple(data, prop);
+    for (const key in counts) {
+        counts[key] = data.length - counts[key];
     }
     return counts;
 }
