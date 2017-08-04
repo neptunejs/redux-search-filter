@@ -4,11 +4,12 @@ export default function filterData(data, filters) {
     return data.filter((item) => {
         main: for (const [filterProp, filterOptions] of filters) {
             const filterValue = filterOptions.value;
-            const operator = filterOptions.operator;
-            const negated = filterOptions.negated;
+            let operator = filterOptions.operator;
+            let negated = filterOptions.negated;
             const itemValue = item[filterProp];
             if (filterOptions.value.length) {
                 if (Array.isArray(itemValue)) { // kind: multiple
+                    operator = operator || AND;
                     if (operator === AND) {
                         for (const val of filterValue) {
                             if (!itemValue.includes(val)) {
@@ -37,6 +38,7 @@ export default function filterData(data, filters) {
                     }
                 } else {
                     if (Array.isArray(filterValue)) { // kind: value
+                        operator = operator || 'OR';
                         const isIncluded = filterValue.includes(item[filterProp]);
                         if (operator === AND) {
                             if (negated) {
@@ -51,6 +53,9 @@ export default function filterData(data, filters) {
                             }
                         } else {
                             if (negated) {
+                                if (filterValue.length > 1) {
+                                    continue;
+                                }
                                 if (isIncluded) {
                                     return false;
                                 }

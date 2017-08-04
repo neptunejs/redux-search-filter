@@ -13,6 +13,7 @@
     "eslint-fix": "npm run eslint -- --fix",
     "prepublishOnly": "rollup -c",
     "test": "run-s testonly eslint",
+    "test-only": "jest",
     "test-travis": "eslint src && jest --coverage && codecov",
     "testonly": "jest"
   },
@@ -28,7 +29,9 @@
   },
   "homepage": "https://github.com/neptunejs/redux-search-filter#readme",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "roots": ["test"],
+    "testMatch": ["**/*.js"]
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
