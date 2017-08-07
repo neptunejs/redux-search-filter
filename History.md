@@ -1,3 +1,13 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/neptunejs/redux-search-filter/compare/v0.1.0...v0.2.0) (2017-08-07)
+
+
+### Features
+
+* add "name" prop to Filter component ([e71c079](https://github.com/neptunejs/redux-search-filter/commit/e71c079))
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/neptunejs/redux-search-filter/compare/v0.0.1...v0.1.0) (2017-08-07)
 
