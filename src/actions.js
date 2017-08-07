@@ -3,7 +3,7 @@ import {
     UPDATE_FILTER,
     SET_NEGATED,
     SET_OPERATOR
-} from './actionTypes';
+} from './constants/actionTypes';
 
 export function updateFilter(name, prop, kind, value) {
     if (value && value.target) { // convert react event to a value

@@ -5,18 +5,20 @@ import {
     UPDATE_FILTER,
     SET_OPERATOR,
     SET_NEGATED
-} from './actionTypes';
+} from './constants/actionTypes';
+import * as kinds from './constants/kinds';
+import {AND, OR} from './constants/operators';
 
 const defaultMultipleFilter = {
     value: [],
     negated: false,
-    operator: 'AND'
+    operator: AND
 };
 
 const defaultValueFilter = {
     value: [],
     negated: false,
-    operator: 'OR'
+    operator: OR
 };
 
 export default function (state = new Map(), action) {
@@ -59,53 +61,55 @@ export default function (state = new Map(), action) {
 
 function setNegated(kind, filter, payload) {
     switch (kind) {
-        case 'value':
-        case 'multiple': {
+        case kinds.value:
+        case kinds.multiple: {
             return Object.assign({}, getDefaultFilter(kind), filter, {
                 negated: payload
             });
         }
-        default: {
-            throw new Error(`unexpected kind: ${kind}`);
-        }
+        default:
+            throwUnexpectedKind(kind);
     }
 }
 
 function setOperator(kind, filter, payload) {
     switch (kind) {
-        case 'value':
-        case 'multiple': {
+        case kinds.value:
+        case kinds.multiple: {
             return Object.assign({}, getDefaultFilter(kind), filter, {
                 operator: payload
             });
         }
-        default: {
-            throw new Error(`unexpected kind: ${kind}`);
-        }
+        default:
+            throwUnexpectedKind(kind);
     }
 }
 
 function formatValue(kind, filter, payload) {
     switch (kind) {
-        case 'value':
-        case 'multiple':
+        case kinds.value:
+        case kinds.multiple:
             return Object.assign({}, getDefaultFilter(kind), filter, {
                 value: Array.isArray(payload) ? payload : [payload]
             });
-        case 'range':
+        case kinds.range:
             return payload;
         default:
-            throw new Error(`unexpected kind: ${kind}`);
+            throwUnexpectedKind(kind);
     }
 }
 
 function getDefaultFilter(kind) {
     switch (kind) {
-        case 'multiple':
+        case kinds.multiple:
             return defaultMultipleFilter;
-        case 'value':
+        case kinds.value:
             return defaultValueFilter;
         default:
-            throw new Error(`unexpected kind: ${kind}`);
+            throwUnexpectedKind(kind);
     }
+}
+
+function throwUnexpectedKind(kind) {
+    throw new Error(`unexpected kind: ${kind}`);
 }

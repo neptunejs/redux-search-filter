@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import * as actionTypes from './actionTypes';
+import * as actionTypes from './constants/actionTypes';
 
 export {default as searchFilter} from './reduxSearchFilter';
 export {default as reducer} from './reducer';

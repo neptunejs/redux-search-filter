@@ -1,3 +1,5 @@
+import {AND} from './constants/operators';
+
 export default function filterData(data, filters) {
     return data.filter((item) => {
         main: for (const [filterProp, filterOptions] of filters) {
@@ -7,7 +9,7 @@ export default function filterData(data, filters) {
             const itemValue = item[filterProp];
             if (filterOptions.value.length) {
                 if (Array.isArray(itemValue)) { // kind: multiple
-                    if (operator === 'AND') {
+                    if (operator === AND) {
                         for (const val of filterValue) {
                             if (!itemValue.includes(val)) {
                                 if (!negated) {
@@ -36,7 +38,7 @@ export default function filterData(data, filters) {
                 } else {
                     if (Array.isArray(filterValue)) { // kind: value
                         const isIncluded = filterValue.includes(item[filterProp]);
-                        if (operator === 'AND') {
+                        if (operator === AND) {
                             if (negated) {
                                 if (isIncluded) {
                                     return false;

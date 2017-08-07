@@ -8,6 +8,7 @@ import {
     setNegated
 } from './actions';
 import filterOneSelector from './filterOneSelector';
+import * as kinds from './constants/kinds';
 
 const specialProps = new Set([
     'component',
@@ -48,7 +49,7 @@ class ConnectedFilter extends Component {
             }
         }
 
-        if (this.props.kind === 'range') {
+        if (this.props.kind === kinds.range) {
             newProps.range = this.selector(this.props);
             newProps.value = currentFilter ? currentFilter : newProps.range;
         } else {

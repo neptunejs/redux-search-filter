@@ -3,14 +3,15 @@ import min from 'ml-array-min';
 import max from 'ml-array-max';
 
 import filterData from './filterData';
+import * as kinds from './constants/kinds';
 
 export default function filterOneSelector(data, prop, kind, filters) {
     switch (kind) {
-        case 'value':
+        case kinds.value:
             return filterValue(data, prop, filters);
-        case 'multiple':
+        case kinds.multiple:
             return filterMultiple(data, prop, filters);
-        case 'range':
+        case kinds.range:
             return filterRange(data, prop, filters);
         default:
             throw new Error(`invalid filter kind: ${kind}`);
