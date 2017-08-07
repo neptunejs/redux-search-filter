@@ -1,5 +1,5 @@
 import {Map} from 'immutable';
-import filterData from '../src/filterData';
+import filterData from '../filterData';
 
 const data = [
     {A: ['Y'], B: 'Y'},

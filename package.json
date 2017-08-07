@@ -29,9 +29,7 @@
   },
   "homepage": "https://github.com/neptunejs/redux-search-filter#readme",
   "jest": {
-    "testEnvironment": "node",
-    "roots": ["test"],
-    "testMatch": ["**/*.js"]
+    "testEnvironment": "node"
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
