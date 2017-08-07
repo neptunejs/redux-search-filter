@@ -80,7 +80,7 @@ describe('action creators', () => {
     it('setOperator', () => {
         const action = setOperator('name', 'prop', 'kind', true);
         expect(action).toEqual({
-            type: SET_NEGATED,
+            type: SET_OPERATOR,
             meta: {
                 name: 'name',
                 prop: 'prop',

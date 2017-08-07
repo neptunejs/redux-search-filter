@@ -71,7 +71,7 @@ function setNegated(kind, filter, payload) {
             });
         }
         default:
-            throwUnexpectedKind(kind);
+            throw unexpectedKind(kind);
     }
 }
 
@@ -87,7 +87,7 @@ function setOperator(kind, filter, payload) {
             });
         }
         default:
-            throwUnexpectedKind(kind);
+            throw unexpectedKind(kind);
     }
 }
 
@@ -108,7 +108,7 @@ function formatValue(kind, filter, payload) {
             return payload;
         }
         default:
-            throwUnexpectedKind(kind);
+            throw unexpectedKind(kind);
     }
 }
 
@@ -118,9 +118,11 @@ function getDefaultFilter(kind) {
             return defaultMultipleFilter;
         case kinds.value:
             return defaultValueFilter;
+        default:
+            throw unexpectedKind(kind);
     }
 }
 
-function throwUnexpectedKind(kind) {
-    throw new Error(`unexpected kind: ${kind}`);
+function unexpectedKind(kind) {
+    return new Error(`unexpected kind: ${kind}`);
 }
