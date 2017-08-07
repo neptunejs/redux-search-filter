@@ -13,11 +13,12 @@ import {
 
 describe('action creators', () => {
     it('updateFilter', () => {
-        const action = updateFilter('name', 'prop', 'kind', 'value');
+        const action = updateFilter('name', 'filterName', 'prop', 'kind', 'value');
         expect(action).toEqual({
             type: UPDATE_FILTER,
             meta: {
                 name: 'name',
+                filterName: 'filterName',
                 prop: 'prop',
                 kind: 'kind',
             },
@@ -26,11 +27,12 @@ describe('action creators', () => {
     });
 
     it('updateFilter with event-like object', () => {
-        const action = updateFilter('name', 'prop', 'kind', {target: {value: 'xxx'}});
+        const action = updateFilter('name', 'filterName', 'prop', 'kind', {target: {value: 'xxx'}});
         expect(action).toEqual({
             type: UPDATE_FILTER,
             meta: {
                 name: 'name',
+                filterName: 'filterName',
                 prop: 'prop',
                 kind: 'kind',
             },
@@ -39,11 +41,12 @@ describe('action creators', () => {
     });
 
     it('updateFilter with falsy value', () => {
-        const action = updateFilter('name', 'prop', 'kind', '');
+        const action = updateFilter('name', 'filterName', 'prop', 'kind', '');
         expect(action).toEqual({
             type: UPDATE_FILTER,
             meta: {
                 name: 'name',
+                filterName: 'filterName',
                 prop: 'prop',
                 kind: 'kind',
             },
@@ -52,11 +55,12 @@ describe('action creators', () => {
     });
 
     it('setNegated', () => {
-        const action = setNegated('name', 'prop', 'kind', true);
+        const action = setNegated('name', 'filterName', 'prop', 'kind', true);
         expect(action).toEqual({
             type: SET_NEGATED,
             meta: {
                 name: 'name',
+                filterName: 'filterName',
                 prop: 'prop',
                 kind: 'kind',
             },
@@ -65,11 +69,12 @@ describe('action creators', () => {
     });
 
     it('setNegated with checkbox event', () => {
-        const action = setNegated('name', 'prop', 'kind', {target: {checked: true}});
+        const action = setNegated('name', 'filterName', 'prop', 'kind', {target: {checked: true}});
         expect(action).toEqual({
             type: SET_NEGATED,
             meta: {
                 name: 'name',
+                filterName: 'filterName',
                 prop: 'prop',
                 kind: 'kind',
             },
@@ -78,11 +83,12 @@ describe('action creators', () => {
     });
 
     it('setOperator', () => {
-        const action = setOperator('name', 'prop', 'kind', true);
+        const action = setOperator('name', 'filterName', 'prop', 'kind', true);
         expect(action).toEqual({
             type: SET_OPERATOR,
             meta: {
                 name: 'name',
+                filterName: 'filterName',
                 prop: 'prop',
                 kind: 'kind',
             },
@@ -91,11 +97,12 @@ describe('action creators', () => {
     });
 
     it('setOperator with event-like object', () => {
-        const action = setOperator('name', 'prop', 'kind', {target: {value: 'OR'}});
+        const action = setOperator('name', 'filterName', 'prop', 'kind', {target: {value: 'OR'}});
         expect(action).toEqual({
             type: SET_OPERATOR,
             meta: {
                 name: 'name',
+                filterName: 'filterName',
                 prop: 'prop',
                 kind: 'kind',
             },

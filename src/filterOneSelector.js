@@ -5,27 +5,27 @@ import max from 'ml-array-max';
 import filterData from './filterData';
 import * as kinds from './constants/kinds';
 
-export default function filterOneSelector(data, prop, kind, filters) {
+export default function filterOneSelector(data, name, prop, kind, filters) {
     switch (kind) {
         case kinds.value:
-            return filterValue(data, prop, filters);
+            return filterValue(data, name, prop, filters);
         case kinds.multiple:
-            return filterMultiple(data, prop, filters);
+            return filterMultiple(data, name, prop, filters);
         case kinds.range:
-            return filterRange(data, prop, filters);
+            return filterRange(data, name, prop, filters);
         default:
             throw new Error(`invalid filter kind: ${kind}`);
     }
 }
 
-function filterValue(data, prop, filters) {
-    data = filterDataFor(data, prop, filters);
+function filterValue(data, name, prop, filters) {
+    data = filterDataFor(data, name, filters);
     return makeArray(countBy(data, prop));
 }
 
-function filterMultiple(data, prop, filters) {
-    data = filterDataFor(data, prop, filters);
-    const filter = filters && filters.get(prop);
+function filterMultiple(data, name, prop, filters) {
+    data = filterDataFor(data, name, filters);
+    const filter = filters && filters.get(name);
     if (filter && filter.negated) {
         return makeArray(countMultipleNegated(data, prop));
     } else {
@@ -34,8 +34,8 @@ function filterMultiple(data, prop, filters) {
 
 }
 
-function filterRange(data, prop, filters) {
-    data = filterDataFor(data, prop, filters);
+function filterRange(data, name, prop, filters) {
+    data = filterDataFor(data, name, filters);
     if (data.length === 0) {
         return {
             min: 0,
@@ -49,10 +49,10 @@ function filterRange(data, prop, filters) {
     };
 }
 
-function filterDataFor(data, prop, filters) {
+function filterDataFor(data, name, filters) {
     if (!filters) return data;
     filters = filters.filter((item, key) => {
-        return key !== prop;
+        return key !== name;
     });
     if (filters.size > 0) {
         data = filterData(data, filters);

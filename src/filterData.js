@@ -2,8 +2,9 @@ import {AND, OR} from './constants/operators';
 
 export default function filterData(data, filters) {
     return data.filter((item) => {
-        main: for (const [filterProp, filterOptions] of filters) {
+        main: for (const [, filterOptions] of filters) {
             const filterValue = filterOptions.value;
+            const filterProp = filterOptions.prop;
             let operator = filterOptions.operator;
             let negated = filterOptions.negated;
             const itemValue = item[filterProp];

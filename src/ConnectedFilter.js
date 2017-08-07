@@ -25,11 +25,13 @@ class ConnectedFilter extends Component {
 
     setupSelector() {
         const data = (props) => props.data;
+        const name = (props) => props.name;
         const prop = (props) => props.prop;
         const kind = (props) => props.kind;
         const filters = (props) => props.filters;
         this.selector = createSelector(
             data,
+            name,
             prop,
             kind,
             filters,
@@ -38,7 +40,7 @@ class ConnectedFilter extends Component {
     }
 
     render() {
-        const currentFilter = this.props.filters ? this.props.filters.get(this.props.prop) : null;
+        const currentFilter = this.props.filters ? this.props.filters.get(this.props.name) : null;
         const newProps = {
             onChange: this.props.filterUpdate
         };
@@ -71,9 +73,9 @@ export default connect(
     (dispatch, props) => {
         const name = props.searchFilter.name;
         return {
-            filterUpdate: (value) => dispatch(updateFilter(name, props.prop, props.kind, value)),
-            setOperator: (value) => dispatch(setOperator(name, props.prop, props.kind, value)),
-            setNegated: (value) => dispatch(setNegated(name, props.prop, props.kind, value))
+            filterUpdate: (value) => dispatch(updateFilter(name, props.name, props.prop, props.kind, value)),
+            setOperator: (value) => dispatch(setOperator(name, props.name, props.prop, props.kind, value)),
+            setNegated: (value) => dispatch(setNegated(name, props.name, props.prop, props.kind, value))
         };
     }
 )(ConnectedFilter);

@@ -9,6 +9,8 @@ export {default as Filter} from './Filter';
 export {actionTypes};
 export const reset = actions.reset;
 export const updateFilter = actions.updateFilter;
+export const setOperator = actions.setOperator;
+export const setNegated = actions.setNegated;
 
 // selectors
 export {default as getFilteredData} from './getFilteredData';

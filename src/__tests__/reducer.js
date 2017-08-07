@@ -35,7 +35,7 @@ describe('reducer', () => {
         const initialState = ImmutableMap();
         const state = reducer(initialState, {type: actionTypes.UPDATE_FILTER, meta: {name: 'test', prop: 'abc', kind: kinds.multiple}, payload: 'TEST'});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: false, operator: AND, value: ['TEST']}})
+            test: ImmutableMap({abc: {negated: false, operator: AND, prop: 'abc', value: ['TEST']}})
         }));
     });
 
@@ -43,7 +43,7 @@ describe('reducer', () => {
         const initialState = ImmutableMap();
         const state = reducer(initialState, {type: actionTypes.UPDATE_FILTER, meta: {name: 'test', prop: 'abc', kind: kinds.multiple}, payload: ['TEST']});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: false, operator: AND, value: ['TEST']}})
+            test: ImmutableMap({abc: {negated: false, operator: AND, prop: 'abc', value: ['TEST']}})
         }));
     });
 
@@ -51,7 +51,22 @@ describe('reducer', () => {
         const initialState = ImmutableMap();
         const state = reducer(initialState, {type: actionTypes.UPDATE_FILTER, meta: {name: 'test', prop: 'abc', kind: kinds.multiple}, payload: ['TEST1', 'TEST2']});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: false, operator: AND, value: ['TEST1', 'TEST2']}})
+            test: ImmutableMap({abc: {negated: false, operator: AND, prop: 'abc', value: ['TEST1', 'TEST2']}})
+        }));
+    });
+
+    it('UPDATE_FILTER multiple filters on same prop', () => {
+        const initialState = ImmutableMap({
+            test: ImmutableMap({
+                abc: {negated: false, operator: AND, prop: 'abc', value: ['TEST']}
+            })
+        });
+        const state = reducer(initialState, {type: actionTypes.UPDATE_FILTER, meta: {name: 'test', prop: 'abc', kind: kinds.multiple, filterName: 'abc2'}, payload: 'TEST1'});
+        expect(state).toEqual(ImmutableMap({
+            test: ImmutableMap({
+                abc: {negated: false, operator: AND, prop: 'abc', value: ['TEST']},
+                abc2: {negated: false, operator: AND, prop: 'abc', value: ['TEST1']}
+            })
         }));
     });
 
@@ -59,7 +74,7 @@ describe('reducer', () => {
         const initialState = ImmutableMap();
         const state = reducer(initialState, {type: actionTypes.UPDATE_FILTER, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: 'TEST'});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: false, operator: OR, value: ['TEST']}})
+            test: ImmutableMap({abc: {negated: false, operator: OR, prop: 'abc', value: ['TEST']}})
         }));
     });
 
@@ -67,7 +82,7 @@ describe('reducer', () => {
         const initialState = ImmutableMap();
         const state = reducer(initialState, {type: actionTypes.UPDATE_FILTER, meta: {name: 'test', prop: 'abc', kind: kinds.range}, payload: {min: 0, max: 1}});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {min: 0, max: 1}})
+            test: ImmutableMap({abc: {min: 0, max: 1, prop: 'abc'}})
         }));
     });
 
@@ -114,33 +129,33 @@ describe('reducer', () => {
         const initialState = ImmutableMap();
         const state = reducer(initialState, {type: actionTypes.SET_NEGATED, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: true});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: OR, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: OR, prop: 'abc', value: []}})
         }));
     });
 
     it('SET_NEGATED existing no change', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: OR, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: OR, prop: 'abc', value: []}})
         });
         const state = reducer(initialState, {type: actionTypes.SET_NEGATED, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: true});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: OR, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: OR, prop: 'abc', value: []}})
         }));
     });
 
     it('SET_NEGATED existing change', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: OR, value: ['X']}})
+            test: ImmutableMap({abc: {negated: true, operator: OR, prop: 'abc', value: ['X']}})
         });
         const state = reducer(initialState, {type: actionTypes.SET_NEGATED, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: false});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: false, operator: OR, value: ['X']}})
+            test: ImmutableMap({abc: {negated: false, operator: OR, prop: 'abc', value: ['X']}})
         }));
     });
 
     it('SET_NEGATED throws on wrong type', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: OR, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: OR, prop: 'abc', value: []}})
         });
         expect(() => reducer(initialState, {type: actionTypes.SET_NEGATED, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: undefined})).toThrow(/^SET_NEGATED expects a boolean value. Received undefined$/);
         expect(() => reducer(initialState, {type: actionTypes.SET_NEGATED, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: 0})).toThrow(/^SET_NEGATED expects a boolean value. Received number$/);
@@ -148,7 +163,7 @@ describe('reducer', () => {
 
     it('SET_NEGATED throws on wrong kind', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: OR, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: OR, prop: 'abc', value: []}})
         });
         expect(() => reducer(initialState, {type: actionTypes.SET_NEGATED, meta: {name: 'test', prop: 'abc', kind: 'wrong'}, payload: false})).toThrow(/^unexpected kind: wrong$/);
     });
@@ -157,40 +172,40 @@ describe('reducer', () => {
         const initialState = ImmutableMap();
         const state = reducer(initialState, {type: actionTypes.SET_OPERATOR, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: AND});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: false, operator: AND, value: []}})
+            test: ImmutableMap({abc: {negated: false, operator: AND, prop: 'abc', value: []}})
         }));
     });
 
     it('SET_OPERATOR existing no change', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: AND, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: AND, prop: 'abc', value: []}})
         });
         const state = reducer(initialState, {type: actionTypes.SET_OPERATOR, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: AND});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: AND, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: AND, prop: 'abc', value: []}})
         }));
     });
 
     it('SET_OPERATOR existing change', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: AND, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: AND, prop: 'abc', value: []}})
         });
         const state = reducer(initialState, {type: actionTypes.SET_OPERATOR, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: OR});
         expect(state).toEqual(ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: OR, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: OR, prop: 'abc', value: []}})
         }));
     });
 
     it('SET_OPERATOR throws on wrong kind', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: AND, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: AND, prop: 'abc', value: []}})
         });
         expect(() => reducer(initialState, {type: actionTypes.SET_OPERATOR, meta: {name: 'test', prop: 'abc', kind: 'wrong'}, payload: OR})).toThrow(/^unexpected kind: wrong$/);
     });
 
     it('SET_OPERATOR throws on wrong value', () => {
         const initialState = ImmutableMap({
-            test: ImmutableMap({abc: {negated: true, operator: AND, value: []}})
+            test: ImmutableMap({abc: {negated: true, operator: AND, prop: 'abc', value: []}})
         });
         expect(() => reducer(initialState, {type: actionTypes.SET_OPERATOR, meta: {name: 'test', prop: 'abc', kind: kinds.value}, payload: 'BAD'})).toThrow(/^wrong operator: BAD$/);
     });

@@ -22,36 +22,38 @@ const defaultValueFilter = {
 };
 
 export default function (state = new Map(), action) {
-    let name, filter;
+    let name, filters, filterName, filterProp;
     if (action.meta && action.meta.name) {
         name = action.meta.name;
-        filter = state.get(name) || new Map();
+        filters = state.get(name) || new Map();
+        filterProp = action.meta.prop;
+        filterName = action.meta.filterName || filterProp;
     }
     switch (action.type) {
         case RESET: {
-            return state.set(name, filter.clear());
+            return state.set(name, filters.clear());
         }
         case UPDATE_FILTER: {
             if (action.payload === null) {
-                return state.set(name, filter.delete(action.meta.prop));
+                return state.set(name, filters.delete(filterName));
             } else {
-                return state.set(name, filter.set(action.meta.prop, formatValue(action.meta.kind, filter.get(action.meta.prop), action.payload)));
+                return state.set(name, filters.set(filterName, formatValue(action.meta.kind, filterProp, filters.get(filterName), action.payload)));
             }
         }
         case SET_NEGATED: {
-            const oldValue = filter.get(action.meta.prop);
+            const oldValue = filters.get(filterName);
             if (oldValue && oldValue.negated === action.payload) {
                 return state;
             } else {
-                return state.set(name, filter.set(action.meta.prop, setNegated(action.meta.kind, oldValue, action.payload)));
+                return state.set(name, filters.set(filterName, setNegated(action.meta.kind, filterProp, oldValue, action.payload)));
             }
         }
         case SET_OPERATOR: {
-            const oldValue = filter.get(action.meta.prop);
+            const oldValue = filters.get(filterName);
             if (oldValue && oldValue.operator === action.payload) {
                 return state;
             } else {
-                return state.set(name, filter.set(action.meta.prop, setOperator(action.meta.kind, oldValue, action.payload)));
+                return state.set(name, filters.set(filterName, setOperator(action.meta.kind, filterProp, oldValue, action.payload)));
             }
         }
         default:
@@ -59,14 +61,15 @@ export default function (state = new Map(), action) {
     }
 }
 
-function setNegated(kind, filter, payload) {
+function setNegated(kind, prop, filter, payload) {
+    const result = {prop};
     if (typeof payload !== 'boolean') {
         throw new TypeError(`SET_NEGATED expects a boolean value. Received ${typeof payload}`);
     }
     switch (kind) {
         case kinds.value:
         case kinds.multiple: {
-            return Object.assign({}, getDefaultFilter(kind), filter, {
+            return Object.assign(result, getDefaultFilter(kind), filter, {
                 negated: payload
             });
         }
@@ -75,14 +78,15 @@ function setNegated(kind, filter, payload) {
     }
 }
 
-function setOperator(kind, filter, payload) {
+function setOperator(kind, prop, filter, payload) {
+    const result = {prop};
     if (payload !== AND && payload !== OR) {
         throw new RangeError(`wrong operator: ${payload}`);
     }
     switch (kind) {
         case kinds.value:
         case kinds.multiple: {
-            return Object.assign({}, getDefaultFilter(kind), filter, {
+            return Object.assign(result, getDefaultFilter(kind), filter, {
                 operator: payload
             });
         }
@@ -91,11 +95,12 @@ function setOperator(kind, filter, payload) {
     }
 }
 
-function formatValue(kind, filter, payload) {
+function formatValue(kind, prop, filter, payload) {
+    const result = {prop};
     switch (kind) {
         case kinds.value:
         case kinds.multiple:
-            return Object.assign({}, getDefaultFilter(kind), filter, {
+            return Object.assign(result, getDefaultFilter(kind), filter, {
                 value: Array.isArray(payload) ? payload : [payload]
             });
         case kinds.range: {
@@ -105,7 +110,7 @@ function formatValue(kind, filter, payload) {
             if (payload.min >= payload.max) {
                 throw new RangeError('range min must be smaller than range max');
             }
-            return payload;
+            return Object.assign(result, payload);
         }
         default:
             throw unexpectedKind(kind);

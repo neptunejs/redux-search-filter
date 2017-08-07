@@ -6,6 +6,9 @@ import ConnectedFilter from './ConnectedFilter';
 export default class Filter extends Component {
     render() {
         const props = Object.assign({}, this.props, {searchFilter: this.context.searchFilter});
+        if (props.name === undefined) {
+            props.name = props.prop;
+        }
         return createElement(ConnectedFilter, props);
     }
 }
@@ -17,5 +20,6 @@ Filter.contextTypes = {
 Filter.propTypes = {
     prop: PropTypes.string.isRequired,
     kind: PropTypes.string.isRequired,
-    component: PropTypes.func.isRequired
+    component: PropTypes.func.isRequired,
+    name: PropTypes.string
 };
