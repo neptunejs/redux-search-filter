@@ -1,4 +1,4 @@
-import {AND} from './constants/operators';
+import {AND, OR} from './constants/operators';
 
 export default function filterData(data, filters) {
     return data.filter((item) => {
@@ -7,8 +7,8 @@ export default function filterData(data, filters) {
             let operator = filterOptions.operator;
             let negated = filterOptions.negated;
             const itemValue = item[filterProp];
-            if (filterOptions.value) {
-                if (filterOptions.value.length) {
+            if (filterValue) {
+                if (filterValue.length > 0) {
                     if (Array.isArray(itemValue)) { // kind: multiple
                         operator = operator || AND;
                         if (operator === AND) {
@@ -37,33 +37,31 @@ export default function filterData(data, filters) {
                             }
                             return false;
                         }
-                    } else {
-                        if (Array.isArray(filterValue)) { // kind: value
-                            operator = operator || 'OR';
-                            const isIncluded = filterValue.includes(item[filterProp]);
-                            if (operator === AND) {
-                                if (negated) {
-                                    if (isIncluded) {
-                                        return false;
-                                    }
-                                } else {
-                                    if (filterValue.length > 1) return false;
-                                    if (!isIncluded) {
-                                        return false;
-                                    }
+                    } else { // kind: value
+                        operator = operator || OR;
+                        const isIncluded = filterValue.includes(item[filterProp]);
+                        if (operator === AND) {
+                            if (negated) {
+                                if (isIncluded) {
+                                    return false;
                                 }
                             } else {
-                                if (negated) {
-                                    if (filterValue.length > 1) {
-                                        continue;
-                                    }
-                                    if (isIncluded) {
-                                        return false;
-                                    }
-                                } else {
-                                    if (!isIncluded) {
-                                        return false;
-                                    }
+                                if (filterValue.length > 1) return false;
+                                if (!isIncluded) {
+                                    return false;
+                                }
+                            }
+                        } else {
+                            if (negated) {
+                                if (filterValue.length > 1) {
+                                    continue;
+                                }
+                                if (isIncluded) {
+                                    return false;
+                                }
+                            } else {
+                                if (!isIncluded) {
+                                    return false;
                                 }
                             }
                         }
