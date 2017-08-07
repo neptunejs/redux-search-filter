@@ -10,8 +10,8 @@ const data = [
 data.forEach((d, idx) => d.idx = idx);
 
 
-describe('Test filter', function () {
-    it('multiple', function () {
+describe('Test filter', () => {
+    it('multiple', () => {
         const filters = [
             {value: [], expected: [0, 1, 2, 3]},
             {value: ['Y'], expected: [0, 2]},
@@ -31,7 +31,7 @@ describe('Test filter', function () {
         }
     });
 
-    it('value', function () {
+    it('value', () => {
         const filters = [
             {value: ['Y'], expected: [0, 3]},
             {value: ['W'], expected: []},
