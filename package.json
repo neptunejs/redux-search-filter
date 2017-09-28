@@ -40,9 +40,9 @@
     "eslint": "^4.4.0",
     "eslint-config-cheminfo": "^1.8.0",
     "eslint-plugin-no-only-tests": "^2.0.0",
-    "jest": "^20.0.4",
+    "jest": "^21.2.1",
     "npm-run-all": "^4.0.2",
-    "rollup": "^0.45.2"
+    "rollup": "^0.50.0"
   },
   "dependencies": {
     "immutable": "^3.8.1",
@@ -50,7 +50,7 @@
     "ml-array-max": "^1.0.1",
     "ml-array-min": "^1.0.1",
     "prop-types": "^15.5.10",
-    "react": "^15.6.1",
+    "react": "^16.0.0",
     "react-redux": "^5.0.5",
     "redux": "^3.7.2",
     "reselect": "^3.0.1"
