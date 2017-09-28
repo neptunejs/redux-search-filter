@@ -5,36 +5,36 @@ import max from 'ml-array-max';
 import filterData from './filterData';
 import * as kinds from './constants/kinds';
 
-export default function filterOneSelector(data, name, prop, kind, filters) {
+export default function filterOneSelector(data, name, propFunc, kind, filters) {
     switch (kind) {
         case kinds.value:
-            return filterValue(data, name, prop, filters);
+            return filterValue(data, name, propFunc, filters);
         case kinds.multiple:
-            return filterMultiple(data, name, prop, filters);
+            return filterMultiple(data, name, propFunc, filters);
         case kinds.range:
-            return filterRange(data, name, prop, filters);
+            return filterRange(data, name, propFunc, filters);
         default:
             throw new Error(`invalid filter kind: ${kind}`);
     }
 }
 
-function filterValue(data, name, prop, filters) {
+function filterValue(data, name, propFunc, filters) {
     data = filterDataFor(data, name, filters);
-    return makeArray(countBy(data, prop));
+    return makeArray(countBy(data, propFunc));
 }
 
-function filterMultiple(data, name, prop, filters) {
+function filterMultiple(data, name, propFunc, filters) {
     data = filterDataFor(data, name, filters);
     const filter = filters && filters.get(name);
     if (filter && filter.negated) {
-        return makeArray(countMultipleNegated(data, prop));
+        return makeArray(countMultipleNegated(data, propFunc));
     } else {
-        return makeArray(countMultiple(data, prop));
+        return makeArray(countMultiple(data, propFunc));
     }
 
 }
 
-function filterRange(data, name, prop, filters) {
+function filterRange(data, name, propFunc, filters) {
     data = filterDataFor(data, name, filters);
     if (data.length === 0) {
         return {
@@ -42,7 +42,7 @@ function filterRange(data, name, prop, filters) {
             max: 1
         };
     }
-    data = data.map((item) => item[prop]);
+    data = data.map((item) => propFunc(item));
     return {
         min: min(data),
         max: max(data)
@@ -74,10 +74,10 @@ function makeArray(map) {
     return result;
 }
 
-function countMultiple(data, prop) {
+function countMultiple(data, propFunc) {
     const counts = {};
     for (const item of data) {
-        const value = item[prop];
+        const value = propFunc(item);
         for (const str of value) {
             if (counts[str] === undefined) {
                 counts[str] = 1;
@@ -89,8 +89,8 @@ function countMultiple(data, prop) {
     return counts;
 }
 
-function countMultipleNegated(data, prop) {
-    const counts = countMultiple(data, prop);
+function countMultipleNegated(data, propFunc) {
+    const counts = countMultiple(data, propFunc);
     for (const key in counts) {
         counts[key] = data.length - counts[key];
     }

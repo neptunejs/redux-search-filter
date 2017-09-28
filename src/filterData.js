@@ -1,13 +1,15 @@
 import {AND, OR} from './constants/operators';
+import lodashProperty from 'lodash-es/property';
 
 export default function filterData(data, filters) {
+    filters = Array.from(filters);
+    filters = filters.map(([name, filterOptions]) => [name, filterOptions, lodashProperty(filterOptions.prop)]);
     return data.filter((item) => {
-        main: for (const [, filterOptions] of filters) {
+        main: for (const [, filterOptions, filterProp] of filters) {
             const filterValue = filterOptions.value;
-            const filterProp = filterOptions.prop;
             let operator = filterOptions.operator;
             let negated = filterOptions.negated;
-            const itemValue = item[filterProp];
+            const itemValue = filterProp(item);
             if (filterValue) {
                 if (filterValue.length > 0) {
                     if (Array.isArray(itemValue)) { // kind: multiple
@@ -40,7 +42,7 @@ export default function filterData(data, filters) {
                         }
                     } else { // kind: value
                         operator = operator || OR;
-                        const isIncluded = filterValue.includes(item[filterProp]);
+                        const isIncluded = filterValue.includes(filterProp(item));
                         if (operator === AND) {
                             if (negated) {
                                 if (isIncluded) {
@@ -69,7 +71,8 @@ export default function filterData(data, filters) {
                     }
                 }
             } else { // kind: range
-                if (item[filterProp] < filterOptions.min || item[filterProp] > filterOptions.max) {
+                const value = filterProp(item);
+                if (value < filterOptions.min || value > filterOptions.max) {
                     return false;
                 }
             }

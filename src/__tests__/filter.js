@@ -2,10 +2,10 @@ import {Map} from 'immutable';
 import filterData from '../filterData';
 
 const data = [
-    {A: ['Y'], B: 'Y', C: 1},
+    {A: ['Y'], B: 'Y', C: 1, D: {X: 'X'}},
     {A: ['Z'], B: 'Z', C: 3},
-    {A: ['Z', 'Y'], B: 'X', C: 2},
-    {A: ['X'], B: 'Y', C: -1},
+    {A: ['Z', 'Y'], B: 'X', C: 2, D: {Y: 'Y'}},
+    {A: ['X'], B: 'Y', C: -1, D: {X: 'OTHER'}},
 ];
 data.forEach((d, idx) => d.idx = idx);
 
@@ -41,7 +41,10 @@ describe('Test filter', () => {
             {prop: 'B', value: ['X'], expected: [2]},
             {prop: 'B', value: ['X', 'Y'], operator: 'AND', negated: true, expected: [1]},
             {prop: 'B', value: ['X', 'Y'], operator: 'OR', negated: true, expected: [0, 1, 2, 3]},
-            {prop: 'B', value: ['Y'], negated: false, expected: [0, 3], operator: 'AND'}
+            {prop: 'B', value: ['Y'], negated: false, expected: [0, 3], operator: 'AND'},
+            {prop: 'D.X', value: ['X'], expected: [0]},
+            {prop: ['D', 'X'], value: ['OTHER'], expected: [3]},
+            {prop: 'D.Y', value: ['Y'], expected: [2]},
         ];
 
         for (let filter of filters) {

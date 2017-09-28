@@ -1,6 +1,7 @@
 import {Component, createElement} from 'react';
 import {connect} from 'react-redux';
 import {createSelector} from 'reselect';
+import lodashProperty from 'lodash-es/property';
 
 import {
     updateFilter,
@@ -26,13 +27,13 @@ class ConnectedFilter extends Component {
     setupSelector() {
         const data = (props) => props.data;
         const name = (props) => props.name;
-        const prop = (props) => props.prop;
+        const propFunc = (props) => lodashProperty(props.prop);
         const kind = (props) => props.kind;
         const filters = (props) => props.filters;
         this.selector = createSelector(
             data,
             name,
-            prop,
+            propFunc,
             kind,
             filters,
             filterOneSelector
