@@ -1,3 +1,13 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/neptunejs/redux-search-filter/compare/v0.2.0...v0.3.0) (2017-09-28)
+
+
+### Features
+
+* use lodash's property function to extract prop ([f14fa8e](https://github.com/neptunejs/redux-search-filter/commit/f14fa8e))
+
+
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/neptunejs/redux-search-filter/compare/v0.1.0...v0.2.0) (2017-08-07)
 
