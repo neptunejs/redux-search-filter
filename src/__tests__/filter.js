@@ -7,7 +7,7 @@ const data = [
     {A: ['Z', 'Y'], B: 'X', C: 2, D: {Y: 'Y'}},
     {A: ['X'], B: 'Y', C: -1, D: {X: 'OTHER'}},
 ];
-data.forEach((d, idx) => d.idx = idx);
+data.forEach((d, idx) => (d.idx = idx));
 
 
 describe('Test filter', () => {

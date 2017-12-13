@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "codecov": "^2.3.0",
+    "codecov": "^3.0.0",
     "eslint": "^4.4.0",
     "eslint-config-cheminfo": "^1.8.0",
     "eslint-plugin-no-only-tests": "^2.0.0",
@@ -45,7 +45,7 @@
     "react": "^16.0.0",
     "react-redux": "^5.0.5",
     "redux": "^3.7.2",
-    "rollup": "^0.50.0"
+    "rollup": "^0.52.1"
   },
   "dependencies": {
     "immutable": "^3.8.1",
