@@ -72,7 +72,7 @@ export default function filterData(data, filters) {
                 }
             } else { // kind: range
                 const value = filterProp(item);
-                if (value < filterOptions.min || value > filterOptions.max) {
+                if (value === undefined || value < filterOptions.min || value > filterOptions.max) {
                     return false;
                 }
             }
