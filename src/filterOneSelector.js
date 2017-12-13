@@ -60,13 +60,13 @@ function filterDataFor(data, name, filters) {
     return data;
 }
 
-function makeArray(map) {
+function makeArray(counts) {
     const result = [];
-    for (const value in map) {
-        if (value !== 'null' && value !== 'undefined') {
+    for (const [value, count] of counts) {
+        if (value !== null && value !== undefined) {
             result.push({
                 value,
-                count: map[value]
+                count
             });
         }
     }
@@ -75,14 +75,14 @@ function makeArray(map) {
 }
 
 function countMultiple(data, propFunc) {
-    const counts = {};
+    const counts = new Map();
     for (const item of data) {
         const value = propFunc(item);
-        for (const str of value) {
-            if (counts[str] === undefined) {
-                counts[str] = 1;
+        for (const el of value) {
+            if (!counts.has(el)) {
+                counts.set(el, 1);
             } else {
-                counts[str]++;
+                counts.set(el, counts.get(el) + 1);
             }
         }
     }
@@ -91,8 +91,8 @@ function countMultiple(data, propFunc) {
 
 function countMultipleNegated(data, propFunc) {
     const counts = countMultiple(data, propFunc);
-    for (const key in counts) {
-        counts[key] = data.length - counts[key];
+    for (const [key, value] of counts) {
+        counts.set(key, data.length - value);
     }
     return counts;
 }
