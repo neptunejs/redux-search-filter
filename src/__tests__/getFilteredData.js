@@ -1,4 +1,4 @@
-import {Map, List} from 'immutable';
+import {Map} from 'immutable';
 import getFilteredData from '../getFilteredData';
 
 const data = [
@@ -13,11 +13,11 @@ data.forEach((d, idx) => (d.idx = idx));
 const getData = () => data;
 
 const searchFilter = new Map({
-    emptyList: new List(),
-    withList: new List([
-        ['name1', {prop: 'A', value: ['Y'], negated: true, expected: [1, 3, 4]}],
-        ['name2', {prop: 'B', value: ['Y'], negated: true, expected: [1, 2, 4]}]
-    ])
+    emptyList: new Map(),
+    withList: new Map({
+        name1: {prop: 'A', value: ['Y'], negated: true, expected: [1, 3, 4]},
+        name2: {prop: 'B', value: ['Y'], negated: true, expected: [1, 2, 4]}
+    })
 });
 
 describe('getFilteredData', () => {
@@ -33,6 +33,6 @@ describe('getFilteredData', () => {
         });
         expect(result.length).toBe(2);
         expect(result.includes(data[1])).toBe(true);
-        expect(result.includes(data[4])).toBe(true);        
+        expect(result.includes(data[4])).toBe(true);
     });
 });

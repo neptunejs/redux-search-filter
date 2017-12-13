@@ -1,4 +1,3 @@
-import countBy from 'lodash-es/countBy';
 import min from 'ml-array-min';
 import max from 'ml-array-max';
 
@@ -36,13 +35,13 @@ function filterMultiple(data, name, propFunc, filters) {
 
 function filterRange(data, name, propFunc, filters) {
     data = filterDataFor(data, name, filters);
+    data = data.map((item) => propFunc(item)).filter(isNumber);
     if (data.length === 0) {
         return {
             min: 0,
-            max: 1
+            max: 0
         };
     }
-    data = data.map((item) => propFunc(item));
     return {
         min: min(data),
         max: max(data)
@@ -63,12 +62,10 @@ function filterDataFor(data, name, filters) {
 function makeArray(counts) {
     const result = [];
     for (const [value, count] of counts) {
-        if (value !== null && value !== undefined) {
-            result.push({
-                value,
-                count
-            });
-        }
+        result.push({
+            value,
+            count
+        });
     }
     result.sort((a, b) => b.count - a.count);
     return result;
@@ -78,6 +75,9 @@ function countMultiple(data, propFunc) {
     const counts = new Map();
     for (const item of data) {
         const value = propFunc(item);
+        if (!value || !value[Symbol.iterator]) {
+            continue;
+        }
         for (const el of value) {
             if (!counts.has(el)) {
                 counts.set(el, 1);
@@ -95,4 +95,21 @@ function countMultipleNegated(data, propFunc) {
         counts.set(key, data.length - value);
     }
     return counts;
+}
+
+function countBy(array, accessor) {
+    const counts = new Map();
+    for (const element of array) {
+        const value = accessor(element);
+        if (!counts.has(value)) {
+            counts.set(value, 1);
+        } else {
+            counts.set(value, counts.get(value) + 1);
+        }
+    }
+    return counts;
+}
+
+function isNumber(x) {
+    return typeof x === 'number';
 }
