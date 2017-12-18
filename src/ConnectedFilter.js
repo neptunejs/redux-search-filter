@@ -54,7 +54,7 @@ class ConnectedFilter extends Component {
 
         if (this.props.kind === kinds.range) {
             newProps.range = this.selector(this.props);
-            newProps.value = currentFilter ? currentFilter : newProps.range;
+            newProps.value = currentFilter;
         } else {
             newProps.options = this.selector(this.props);
             newProps.filter = currentFilter;
