@@ -11,6 +11,14 @@
 
 `$ npm install --save redux-search-filter`
 
+## API
+
+### Kinds
+
+* value
+* multiple
+* range
+
 ## License
 
   [MIT](./LICENSE)
