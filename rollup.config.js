@@ -1,5 +1,7 @@
-export default {
-    entry: 'src/index.js',
-    format: 'cjs',
-    dest: 'lib/index.js'
+const rollupConfig = {
+  entry: 'src/index.js',
+  format: 'cjs',
+  dest: 'lib/index.js'
 };
+
+export default rollupConfig;

@@ -9,7 +9,7 @@
     "src"
   ],
   "scripts": {
-    "eslint": "eslint src",
+    "eslint": "eslint src rollup.config.js",
     "eslint-fix": "npm run eslint -- --fix",
     "prepublishOnly": "rollup -c",
     "test": "run-s testonly eslint",
@@ -37,15 +37,16 @@
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
     "codecov": "^3.0.0",
-    "eslint": "^4.4.0",
-    "eslint-config-cheminfo": "^1.8.0",
-    "eslint-plugin-no-only-tests": "^2.0.0",
-    "jest": "^21.2.1",
+    "eslint": "^5.0.0",
+    "eslint-config-cheminfo": "^1.18.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "jest": "^23.2.0",
     "npm-run-all": "^4.0.2",
     "react": "^16.0.0",
     "react-redux": "^5.0.5",
-    "redux": "^3.7.2",
-    "rollup": "^0.52.1"
+    "redux": "^4.0.0",
+    "rollup": "^0.61.2"
   },
   "dependencies": {
     "immutable": "^3.8.1",

@@ -1,25 +1,27 @@
-import {Component, createElement} from 'react';
+import { Component, createElement } from 'react';
 import PropTypes from 'prop-types';
 
 import ConnectedFilter from './ConnectedFilter';
 
 export default class Filter extends Component {
-    render() {
-        const props = Object.assign({}, this.props, {searchFilter: this.context.searchFilter});
-        if (props.name === undefined) {
-            props.name = props.prop;
-        }
-        return createElement(ConnectedFilter, props);
+  render() {
+    const props = Object.assign({}, this.props, {
+      searchFilter: this.context.searchFilter
+    });
+    if (props.name === undefined) {
+      props.name = props.prop;
     }
+    return createElement(ConnectedFilter, props);
+  }
 }
 
 Filter.contextTypes = {
-    searchFilter: PropTypes.object
+  searchFilter: PropTypes.object
 };
 
 Filter.propTypes = {
-    prop: PropTypes.string.isRequired,
-    kind: PropTypes.string.isRequired,
-    component: PropTypes.func.isRequired,
-    name: PropTypes.string
+  prop: PropTypes.string.isRequired,
+  kind: PropTypes.string.isRequired,
+  component: PropTypes.func.isRequired,
+  name: PropTypes.string
 };
