@@ -1,6 +1,7 @@
 import lodashProperty from 'lodash-es/property';
 
 import { AND, OR } from './constants/operators';
+import { MULTIPLE_EMPTY } from './constants/sentinels';
 
 export default function filterData(data, filters) {
   filters = Array.from(filters);
@@ -21,20 +22,26 @@ export default function filterData(data, filters) {
             // kind: multiple
             operator = operator || AND;
             if (operator === AND) {
-              for (const val of filterValue) {
-                if (!itemValue.includes(val)) {
-                  if (!negated) {
+              for (const value of filterValue) {
+                if (
+                  itemValue.includes(value) ||
+                  (value === MULTIPLE_EMPTY && itemValue.length === 0)
+                ) {
+                  if (negated) {
                     return false;
                   }
                 } else {
-                  if (negated) {
+                  if (!negated) {
                     return false;
                   }
                 }
               }
             } else {
               for (const value of filterValue) {
-                if (itemValue.includes(value)) {
+                if (
+                  itemValue.includes(value) ||
+                  (value === MULTIPLE_EMPTY && itemValue.length === 0)
+                ) {
                   if (!negated) {
                     continue main;
                   }

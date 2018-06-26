@@ -14,3 +14,6 @@ export const setNegated = actions.setNegated;
 
 // selectors
 export { default as getFilteredData } from './getFilteredData';
+
+// sentinels
+export { MULTIPLE_EMPTY } from './constants/sentinels';

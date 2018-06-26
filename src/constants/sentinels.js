@@ -1,0 +1,1 @@
+export const MULTIPLE_EMPTY = 'MULTIPLE_EMPTY';

@@ -1,22 +1,24 @@
 import { Map } from 'immutable';
 
 import filterData from '../filterData';
+import { MULTIPLE_EMPTY } from '../constants/sentinels';
 
 const data = [
   { A: ['Y'], B: 'Y', C: 1, D: { X: 'X' } },
   { A: ['Z'], B: 'Z', C: 3 },
   { A: ['Z', 'Y'], B: 'X', C: 2, D: { Y: 'Y' } },
   { A: ['X'], B: 'Y', C: -1, D: { X: 'OTHER' } },
-  { B: true }
+  { A: [], B: true },
+  {}
 ];
 data.forEach((d, idx) => (d.idx = idx));
 
 describe('Test filter', () => {
   it('multiple', () => {
     const filters = [
-      { prop: 'A', value: [], expected: [0, 1, 2, 3, 4] },
+      { prop: 'A', value: [], expected: [0, 1, 2, 3, 4, 5] },
       { prop: 'A', value: ['Y'], expected: [0, 2] },
-      { prop: 'A', value: ['Y'], negated: true, expected: [1, 3, 4] },
+      { prop: 'A', value: ['Y'], negated: true, expected: [1, 3, 4, 5] },
       { prop: 'A', value: ['Y', 'Z'], expected: [2] },
       { prop: 'A', value: ['Y', 'Z'], operator: 'OR', expected: [0, 1, 2] },
       {
@@ -24,16 +26,17 @@ describe('Test filter', () => {
         value: ['Y', 'Z'],
         operator: 'AND',
         negated: true,
-        expected: [3, 4]
+        expected: [3, 4, 5]
       },
       {
         prop: 'A',
         value: ['Z', 'Y'],
         operator: 'OR',
         negated: true,
-        expected: [0, 1, 3, 4]
+        expected: [0, 1, 3, 4, 5]
       },
-      { prop: 'A', value: ['W'], expected: [] }
+      { prop: 'A', value: ['W'], expected: [] },
+      { prop: 'A', value: [MULTIPLE_EMPTY], expected: [4] }
     ];
     for (let filter of filters) {
       const f = Map({
@@ -50,7 +53,7 @@ describe('Test filter', () => {
     const filters = [
       { prop: 'B', value: ['Y'], expected: [0, 3] },
       { prop: 'B', value: ['W'], expected: [] },
-      { prop: 'B', value: ['Y'], negated: true, expected: [1, 2, 4] },
+      { prop: 'B', value: ['Y'], negated: true, expected: [1, 2, 4, 5] },
       { prop: 'B', value: ['X', 'Y'], operator: 'AND', expected: [] },
       { prop: 'B', value: ['X', 'Y'], operator: 'OR', expected: [0, 2, 3] },
       { prop: 'B', value: ['X'], expected: [2] },
@@ -59,14 +62,14 @@ describe('Test filter', () => {
         value: ['X', 'Y'],
         operator: 'AND',
         negated: true,
-        expected: [1, 4]
+        expected: [1, 4, 5]
       },
       {
         prop: 'B',
         value: ['X', 'Y'],
         operator: 'OR',
         negated: true,
-        expected: [0, 1, 2, 3, 4]
+        expected: [0, 1, 2, 3, 4, 5]
       },
       {
         prop: 'B',

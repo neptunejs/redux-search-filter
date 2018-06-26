@@ -3,6 +3,7 @@ import max from 'ml-array-max';
 
 import filterData from './filterData';
 import * as kinds from './constants/kinds';
+import { MULTIPLE_EMPTY } from './constants/sentinels';
 
 export default function filterOneSelector(data, name, propFunc, kind, filters) {
   switch (kind) {
@@ -76,6 +77,13 @@ function countMultiple(data, propFunc) {
     const value = propFunc(item);
     if (!value || !value[Symbol.iterator]) {
       continue;
+    }
+    if (value.length === 0) {
+      if (!counts.has(MULTIPLE_EMPTY)) {
+        counts.set(MULTIPLE_EMPTY, 1);
+      } else {
+        counts.set(MULTIPLE_EMPTY, counts.get(MULTIPLE_EMPTY) + 1);
+      }
     }
     for (const el of value) {
       if (!counts.has(el)) {
